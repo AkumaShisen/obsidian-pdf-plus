@@ -1450,11 +1450,14 @@ export class PDFPlusSettingTab extends PluginSettingTab {
 		this.component.load();
 
 
+		// Show which section is currently being displayed by highlighting the corresponding icon in the header.
 		activeWindow.setTimeout(() => this.updateHeaderElClass());
-		this.component.registerDomEvent(
-			this.contentEl, 'wheel',
-			debounce(() => this.updateHeaderElClass(), 100)
-		);
+		for (const eventType of ['wheel', 'touchmove'] as const) {
+			this.component.registerDomEvent(
+				this.contentEl, eventType,
+				debounce(() => this.updateHeaderElClass(), 100)
+			);
+		}
 
 
 		this.contentEl.createDiv('top-note', async (el) => {
