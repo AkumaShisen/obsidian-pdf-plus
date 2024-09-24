@@ -1455,7 +1455,8 @@ export class PDFPlusSettingTab extends PluginSettingTab {
 		for (const eventType of ['wheel', 'touchmove'] as const) {
 			this.component.registerDomEvent(
 				this.contentEl, eventType,
-				debounce(() => this.updateHeaderElClass(), 100)
+				debounce(() => this.updateHeaderElClass(), 100),
+				{ passive: true }
 			);
 		}
 
