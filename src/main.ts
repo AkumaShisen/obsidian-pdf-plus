@@ -103,8 +103,6 @@ export default class PDFPlus extends Plugin {
 
 		this.registerGlobalVariables();
 
-		this.registerGlobalDomEvents();
-
 		this.registerEvents();
 
 		this.startTrackingActiveMarkdownFile();
@@ -474,6 +472,16 @@ export default class PDFPlus extends Plugin {
 				}
 			});
 
+			// Make PDF embeds with a subpath unscrollable
+			if (this.settings.embedUnscrollable) {
+				this.registerDomEvent(embed.containerEl, 'wheel', (evt) => {
+					if (isTargetHTMLElement(evt, evt.target)
+						&& evt.target.closest('.pdf-embed[src*="#"] .pdf-viewer-container')) {
+						evt.preventDefault();
+					}
+				}, { passive: false });
+			}
+
 			if (embed instanceof PDFCroppedEmbed) {
 				this.registerDomEvent(embed.containerEl, 'click', (evt) => {
 					if (isTargetHTMLElement(evt, evt.target) && evt.target.closest('.cm-editor')) {
@@ -506,21 +514,6 @@ export default class PDFPlus extends Plugin {
 	private registerGlobalVariables() {
 		this.registerGlobalVariable('pdfPlus', this, false);
 		this.registerGlobalVariable('pdflib', pdflib, false);
-	}
-
-	registerGlobalDomEvent<K extends keyof DocumentEventMap>(type: K, callback: (this: HTMLElement, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void {
-		this.lib.registerGlobalDomEvent(this, type, callback, options);
-	}
-
-	private registerGlobalDomEvents() {
-		// Make PDF embeds with a subpath unscrollable
-		this.registerGlobalDomEvent('wheel', (evt) => {
-			if (this.settings.embedUnscrollable
-				&& isTargetHTMLElement(evt, evt.target)
-				&& evt.target.closest('.pdf-embed[src*="#"] .pdf-viewer-container')) {
-				evt.preventDefault();
-			}
-		}, { passive: false });
 	}
 
 	private registerEvents() {
