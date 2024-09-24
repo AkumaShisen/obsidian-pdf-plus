@@ -88,6 +88,7 @@ export default class PDFPlus extends Plugin {
 		await this.loadSettings();
 		await this.saveSettings();
 
+
 		this.domManager = this.addChild(new DomManager(this));
 		this.domManager.registerCalloutRenderer();
 
@@ -110,6 +111,8 @@ export default class PDFPlus extends Plugin {
 		this.registerObsidianProtocolHandler('pdf-plus', this.obsidianProtocolHandler.bind(this));
 
 		this.addSettingTab(this.settingTab = new PDFPlusSettingTab(this));
+
+		this.registerStyleSettings();
 	}
 
 	async onunload() {
@@ -283,6 +286,16 @@ export default class PDFPlus extends Plugin {
 
 	saveLocalStorage(key: string, value?: any) {
 		this.app.saveLocalStorage(this.manifest.id + '-' + key, value);
+	}
+
+	/**
+	 * Tell the Style Settings plugin to parse styles.css on load and unload
+	 * so that the Style Settings pane can be updated.
+	 */
+	private registerStyleSettings() {
+		// See https://github.com/mgmeyers/obsidian-style-settings?tab=readme-ov-file#plugin-support
+		this.app.workspace.trigger('parse-style-settings');
+		this.register(() => this.app.workspace.trigger('parse-style-settings'));
 	}
 
 	private registerRibbonIcons() {
