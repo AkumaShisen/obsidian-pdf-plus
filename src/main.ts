@@ -474,12 +474,17 @@ export default class PDFPlus extends Plugin {
 
 			// Make PDF embeds with a subpath unscrollable
 			if (this.settings.embedUnscrollable) {
-				this.registerDomEvent(embed.containerEl, 'wheel', (evt) => {
-					if (isTargetHTMLElement(evt, evt.target)
-						&& evt.target.closest('.pdf-embed[src*="#"] .pdf-viewer-container')) {
-						evt.preventDefault();
-					}
-				}, { passive: false });
+				for (const eventType of [
+					'wheel', // mousewheel
+					'touchmove' // finger swipe
+				] as const) {
+					this.registerDomEvent(embed.containerEl, eventType, (evt) => {
+						if (isTargetHTMLElement(evt, evt.target)
+							&& evt.target.closest('.pdf-embed[src*="#"] .pdf-viewer-container')) {
+							evt.preventDefault();
+						}
+					}, { passive: false });
+				}
 			}
 
 			if (embed instanceof PDFCroppedEmbed) {
