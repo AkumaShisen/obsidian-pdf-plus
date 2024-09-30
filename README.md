@@ -4,12 +4,18 @@
 </p>
 
 > [!note]
-> All contribution to this plugin has been made by a single voluntary student (me).
+> All contribution to this plugin has been made by a single voluntary student (original author).
 > 
 > - If you like this plugin, don't forget to star this repository!
 > - If this plugin has become an important piece of your workflow, please consider [donation](#support-development) to show some love for this project.
 > 
 > Both are greatly appreciated. Thank you!
+
+
+> [!note]
+> This fork was made by me to add a small feature (more like a proposal for it)
+
+
 
 This is an [Obsidian.md](https://obsidian.md) plugin for a better PDF experience. Specifically:
 
